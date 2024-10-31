@@ -5,7 +5,6 @@ from rest_framework.decorators import action
 from videos.models import Video
 from videos.serializers import VideoSerializer
 
-
 import subprocess
 
 
@@ -17,7 +16,6 @@ class VideoViewSet(viewsets.ModelViewSet):
     def download(self, request, pk=None):
         video = self.get_object()
         subprocess.run(['echo', 'Downloading', video.video_file.path])
-        video.status = 'completed'
         video.save()
         return Response({'status': 'Download completed'})
 
@@ -25,5 +23,7 @@ class VideoViewSet(viewsets.ModelViewSet):
     def upload(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(status='pending')
+        serializer.save()
+
         return Response(serializer.data)
+

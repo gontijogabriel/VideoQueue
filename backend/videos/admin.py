@@ -4,19 +4,13 @@ from videos.models import Video
 
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'video_file', 'thumbnail', 'status', 'created_at')
-    list_filter = ('status',)
+    list_display = ('title', 'video_file', 'thumbnail', 'created_at')
     search_fields = ('title',)
-    readonly_fields = ('created_at', 'status')
+    readonly_fields = ('created_at',)
     fieldsets = (
         (None, {
-            'fields': ('title', 'video_file', 'status')
+            'fields': ('title', 'video_file')
         }),
     )
-
-    def save_model(self, request, obj, form, change):
-        if not change:
-            obj.status = 'pending'
-        obj.save()
-
+    
 admin.site.register(Video, VideoAdmin)
