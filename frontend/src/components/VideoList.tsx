@@ -1,12 +1,12 @@
-'use client'
+// VideoList.tsx
+'use client';
 
 import { FC, useEffect, useState } from 'react';
 import { fetchVideos } from '@/api/routes';
 import { Video } from '@/types/video';
 import Loading from './Loading';
 
-
-const VideoList: FC = () => {
+const VideoList: FC<{ refresh: boolean }> = ({ refresh }) => {
     const [videos, setVideos] = useState<Video[]>([]);
     const [loading, setLoading] = useState(false);
     const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
@@ -24,7 +24,7 @@ const VideoList: FC = () => {
             }
         };
         loadVideos();
-    }, []);
+    }, [refresh]); // Recarregar quando 'refresh' mudar
 
     if (loading) return <Loading />;
 

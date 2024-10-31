@@ -1,9 +1,15 @@
-'use client'
+// VideoUpload.tsx
+'use client';
 
 import { useState } from 'react';
-import { uploadVideo } from '@/api/routes';
+import { fetchVideos, uploadVideo } from '@/api/routes';
+import Loading from './Loading';
 
-export default function VideoUpload() {
+interface VideoUploadProps {
+    onUpload: () => void; // Função para notificar que o upload foi feito
+}
+
+export default function VideoUpload({ onUpload }: VideoUploadProps) {
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -24,7 +30,7 @@ export default function VideoUpload() {
 
         try {
             await uploadVideo(formData);
-            alert('Upload realizado com sucesso!');
+            onUpload(); // Chama a função para notificar que o upload foi feito
             setFile(null);
         } catch (uploadError) {
             setError('Erro ao realizar o upload. Tente novamente.');
@@ -33,6 +39,10 @@ export default function VideoUpload() {
             setLoading(false);
         }
     };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
